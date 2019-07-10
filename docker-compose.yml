@@ -1,22 +1,23 @@
----
-version: '2'
-services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+version: "2"
 
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    depends_on:
-      - zookeeper
+services:
+  java-grpc-server:
+    image: "karjunan/java-grpc-server:latest"
+    container_name: java-grpc-server
     ports:
-      - 10.0.102.166:9092:9092
+      - 10.0.102.166:43016:9000
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.0.102.166:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      HOST_IP: 10.0.102.166:9092
+
+  node-grpc-client-microservice:
+    image: "karjunan/node-grpc-client-microservice:latest"
+    restart: always
+    container_name: node-grpc-client-microservice
+    depends_on:
+      - java-grpc-server
+    ports:
+      - 10.0.102.166:3010:3000
+    links:
+      - java-grpc-server
+    environment:
+      GRPC_SERVER_IP: 10.0.102.166:43016
