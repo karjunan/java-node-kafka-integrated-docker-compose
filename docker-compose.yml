@@ -9,15 +9,15 @@ services:
     environment:
       HOST_IP: 10.0.102.166:9092
 
-  node-grpc-client-microservice:
-    image: "karjunan/node-grpc-client-microservice:latest"
-    restart: always
-    container_name: node-grpc-client-microservice
-    depends_on:
-      - java-grpc-server
-    ports:
-      - 10.0.102.166:3010:3000
-    links:
-      - java-grpc-server
-    environment:
-      GRPC_SERVER_IP: 10.0.102.166:43016
+  # node-grpc-client-microservice:
+  #   image: "karjunan/node-grpc-client-microservice:latest"
+  #   restart: always
+  #   container_name: node-grpc-client-microservice
+  #   depends_on:
+  #     - java-grpc-server
+  #   ports:
+  #     - 10.0.102.166:3010:3000
+  #   links:
+  #     - java-grpc-server
+  #   environment:
+  #     GRPC_SERVER_IP: 10.0.102.166:43016
