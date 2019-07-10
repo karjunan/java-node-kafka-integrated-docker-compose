@@ -1,0 +1,31 @@
+version: "2"
+
+services:
+  kafkaserver:
+    image: "spotify/kafka:latest"
+    container_name: kafka
+    hostname: 10.0.102.166
+    # networks:
+    #   - kafkanet
+    ports:
+      - 10.0.102.166:2181:2181
+      - 10.0.102.166:9092:9092
+    environment:
+      ADVERTISED_HOST: 10.0.102.166
+      ADVERTISED_PORT: 9092
+
+  java-grpc-server:
+    image: "karjunan/java-grpc-server:latest"
+    container_name: java-grpc-server
+    # networks:
+    #   - kafkanet
+    ports:
+      - 10.0.102.166:43016:9000
+    links:
+      - kafkaserver
+    environment:
+      HOST_IP: "10.0.102.166:9092"
+
+# networks:
+#   kafkanet:
+#     driver: bridge
